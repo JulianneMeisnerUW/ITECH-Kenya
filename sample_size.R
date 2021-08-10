@@ -1,3 +1,4 @@
+#------------household survey----------#
 library(dplyr)
 library(samplingbook)
 
@@ -71,3 +72,31 @@ write.csv(file="counties.csv", county_data)
 #Same number of households per PSU (10 households each?), so just comes down to logistics
 
 #https://nces.ed.gov/FCSM/pdf/2009FCSM_Krenzke_IX-C.pdf
+
+#------------individual-level----------#
+individuals<-function(p, d, nonresp, deff){
+  num<-p*(1-p)
+  denom<-d^2
+  res<-(1.96^2*(num/denom))*nonresp*deff
+  return(res)
+}
+
+#For population 58 and above
+p<-0.5 #Assume 50% vaccinated
+nonresp<-1.25 #Assume 10% don't respond or can't be found
+d<-0.23 #desired relative precision
+deff<-1.3
+
+n<-individuals(p, d,nonresp, deff)
+
+comorbid<-function(n, prop){
+  res<-n/prop
+  return(res)
+}
+
+prop<-0.25 #Proportion of people over 58 who have a comorbidity
+
+comorbid(n, prop)
+
+
+
